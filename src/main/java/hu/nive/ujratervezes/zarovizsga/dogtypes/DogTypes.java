@@ -18,13 +18,19 @@ public class DogTypes {
 
     public List<String> getDogsByCountry(String country) {
         try (Connection conn = dataSource.getConnection()){
-            try (PreparedStatement ps = conn.prepareStatement("SELECT NAME FROM dog_types WHERE country = ?")) {
-                ps.setString(1,country);
-                ResultSet rs = ps.executeQuery();
-                return getListFromResultSet(rs);
-            }
+            return getStrings(country, conn);
         } catch (SQLException sqle) {
            throw new IllegalStateException("Cannot connect: " + sqle.getMessage());
+        }
+    }
+
+    private List<String> getStrings(String country, Connection conn) {
+        try (PreparedStatement ps = conn.prepareStatement("SELECT NAME FROM dog_types WHERE country = ?")) {
+            ps.setString(1, country);
+            ResultSet rs = ps.executeQuery();
+            return getListFromResultSet(rs);
+        } catch (SQLException sqle) {
+            throw new IllegalStateException("Cannot execute query: " + sqle.getMessage());
         }
     }
 
@@ -35,7 +41,7 @@ public class DogTypes {
                 result.add(rs.getString("name").toLowerCase(Locale.ROOT));
             }
         } catch (SQLException sqle) {
-            throw new IllegalStateException("Cannot execute query: " + sqle.getMessage());
+            throw new IllegalStateException("Cannot read results: " + sqle.getMessage());
         }
         return result;
     }
