@@ -25,7 +25,7 @@ public class DogTypes {
     }
 
     private List<String> getStrings(String country, Connection conn) {
-        try (PreparedStatement ps = conn.prepareStatement("SELECT NAME FROM dog_types WHERE country = ?")) {
+        try (PreparedStatement ps = conn.prepareStatement("SELECT NAME FROM dog_types WHERE country = ? order by 1")) {
             ps.setString(1, country);
             ResultSet rs = ps.executeQuery();
             return getListFromResultSet(rs);
