@@ -15,18 +15,23 @@ public class WorkHours {
             int minHours = 25;
             String toPrint = "";
             String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                int hours = Integer.parseInt(parts[1]);
-                if(hours < minHours) {
-                    minHours = hours;
-                    toPrint = String.format("%s: %s", parts[0], parts[2]);
-                }
-            }
-            return toPrint;
+            return getMinLine(br, minHours, toPrint);
         } catch (IOException e) {
             throw new IllegalStateException("Cannot read file");
         }
+    }
+
+    private String getMinLine(BufferedReader br, int minHours, String toPrint) throws IOException {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] parts = line.split(",");
+            int hours = Integer.parseInt(parts[1]);
+            if(hours < minHours) {
+                minHours = hours;
+                toPrint = String.format("%s: %s", parts[0], parts[2]);
+            }
+        }
+        return toPrint;
     }
 }
 
